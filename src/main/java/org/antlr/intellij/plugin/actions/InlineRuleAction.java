@@ -81,14 +81,10 @@ public class InlineRuleAction extends AnAction {
 		final String ruleText = ruleText_; // we ref from inner class; requires final
 
 		// replace rule refs with rule text
-		WriteCommandAction setTextAction = new WriteCommandAction(project) {
-			@Override
-			protected void run(final Result result) {
-				// do in a single action so undo works in one go
-				replaceRuleRefs(doc,tokens,ruleName,rrefNodes,ruleText);
-			}
-		};
-		setTextAction.execute();
+		WriteCommandAction.writeCommandAction(project).run(() -> {
+			// do in a single action so undo works in one go
+			replaceRuleRefs(doc,tokens,ruleName,rrefNodes,ruleText);
+		});
 	}
 
 	public void replaceRuleRefs(Document doc, CommonTokenStream tokens,
